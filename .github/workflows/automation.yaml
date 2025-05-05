@@ -27,6 +27,9 @@ jobs:
           npm install
           npx playwright install --with-deps chromium
 
+      - name: Create reports directory
+        run: mkdir -p reports
+
       - name: Build TypeScript
         run: npm run build
 
@@ -36,10 +39,19 @@ jobs:
           NODEWEB: ${{ secrets.NODEWEB }}
         run: node dist/index.js
 
+      - name: List generated files
+        if: always()
+        run: |
+          echo "Listing contents of reports directory:"
+          ls -la reports/ || echo "reports directory not found"
+          echo "Listing contents of current directory:"
+          ls -la
+
       - name: Upload screenshots as artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: screenshots
           path: reports/
+          if-no-files-found: warn
           retention-days: 7

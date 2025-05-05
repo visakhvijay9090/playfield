@@ -1,10 +1,12 @@
 {
-  "name": "playwright",
+  "name": "playwrightautomation",
   "version": "1.0.0",
-  "main": "test.js",
+  "main": "index.js",
   "scripts": {
     "test": "ts-node test.ts",
-    "headtestV": "ts-node headlesstest.ts"
+    "headtestV": "ts-node headlesstest.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
   },
   "keywords": [],
   "author": "",
