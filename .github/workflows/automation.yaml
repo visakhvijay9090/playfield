@@ -1,0 +1,45 @@
+name: Web Automation
+
+on:
+  schedule:
+    # Schedule to run at specific times (UTC)
+    # This example runs at 8 AM UTC every day
+    - cron: "0 8 * * *"
+
+  # Allow manual triggering
+  workflow_dispatch:
+
+jobs:
+  run-automation:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        run: |
+          npm install
+          npx playwright install --with-deps chromium
+
+      - name: Build TypeScript
+        run: npm run build
+
+      - name: Run automation script
+        env:
+          CREDENTIALS_JSON: ${{ secrets.CREDENTIALS_JSON }}
+          NODEWEB: ${{ secrets.NODEWEB }}
+        run: node dist/index.js
+
+      - name: Upload screenshots as artifacts
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: screenshots
+          path: reports/
+          retention-days: 7
