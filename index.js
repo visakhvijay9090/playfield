@@ -1,7 +1,7 @@
 import { launchSessions } from "./sessions/sessionManager";
 import { log, colors } from "./utils/logger";
 import { cleanupReports } from "./utils/cleanup";
-import { getCredentials } from "./secretsManager";
+import { getCredentials } from "./secretsManager.js";
 
 // Main function
 async function main() {
