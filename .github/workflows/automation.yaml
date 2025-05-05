@@ -2,30 +2,30 @@ name: Scheduled Tests
 
 on:
   schedule:
-    - cron: '0 */3 * * *' # Runs every 3 hours
+    - cron: "0 */3 * * *" # Runs every 3 hours
   workflow_dispatch: # Allows manual triggering
 
 jobs:
-  run-automation:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '18'
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "18"
 
-    - name: Install dependencies
-      run: npm install
+      - name: Install dependencies
+        run: npm install
 
-    - name: Install Playwright Browsers
-      run: npx playwright install
+      - name: Install Playwright Browsers
+        run: npx playwright install
 
-    - name: Run automation script
-      env:
+      - name: Run tests
+        env:
           USER1_USERNAME: ${{ secrets.USER1_USERNAME }}
           USER1_PASSWORD: ${{ secrets.USER1_PASSWORD }}
           USER2_USERNAME: ${{ secrets.USER2_USERNAME }}
@@ -34,5 +34,5 @@ jobs:
           USER3_PASSWORD: ${{ secrets.USER3_PASSWORD }}
           USER4_USERNAME: ${{ secrets.USER4_USERNAME }}
           USER4_PASSWORD: ${{ secrets.USER4_PASSWORD }}
-        NODEWEB: ${{ secrets.NODEWEB }}
-      run: npm test
+          NODEWEB: ${{ secrets.NODEWEB }}
+        run: npm test
