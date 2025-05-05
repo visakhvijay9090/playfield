@@ -35,4 +35,5 @@ jobs:
           USER4_USERNAME: ${{ secrets.USER4_USERNAME }}
           USER4_PASSWORD: ${{ secrets.USER4_PASSWORD }}
           NODEWEBSITE: ${{ secrets.NODEWEBSITE }}
+          DEBUG_MODE: "true" # Enable debug mode
         run: npm test
