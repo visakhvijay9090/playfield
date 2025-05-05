@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "ts-node test.ts",
+    "test": "ts-node index.ts",
     "headtestV": "ts-node headlesstest.ts",
     "build": "tsc",
     "start": "node dist/index.js"
