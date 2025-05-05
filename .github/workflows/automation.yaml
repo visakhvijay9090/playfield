@@ -1,57 +1,35 @@
-name: Web Automation
+name: Scheduled Tests
 
 on:
   schedule:
-    # Schedule to run at specific times (UTC)
-    # This example runs at 8 AM UTC every day
-    - cron: "0 8 * * *"
-
-  # Allow manual triggering
-  workflow_dispatch:
+    - cron: "0 */3 * * *" # Runs every 3 hours
+  workflow_dispatch: # Allows manual triggering
 
 jobs:
-  run-automation:
+  test:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
         with:
           node-version: "18"
 
       - name: Install dependencies
-        run: |
-          npm install
-          npx playwright install --with-deps chromium
+        run: npm install
 
-      - name: Create reports directory
-        run: mkdir -p reports
-
-      - name: Build TypeScript
-        run: npm run build
-
-      - name: Run automation script
+      - name: Run tests
         env:
-          CREDENTIALS_JSON: ${{ secrets.CREDENTIALS_JSON }}
+          USER1_USERNAME: ${{ secrets.USER1_USERNAME }}
+          USER1_PASSWORD: ${{ secrets.USER1_PASSWORD }}
+          USER2_USERNAME: ${{ secrets.USER2_USERNAME }}
+          USER2_PASSWORD: ${{ secrets.USER2_PASSWORD }}
+          USER3_USERNAME: ${{ secrets.USER3_USERNAME }}
+          USER3_PASSWORD: ${{ secrets.USER3_PASSWORD }}
+          USER4_USERNAME: ${{ secrets.USER4_USERNAME }}
+          USER4_PASSWORD: ${{ secrets.USER4_PASSWORD }}
           NODEWEB: ${{ secrets.NODEWEB }}
-        run: node dist/index.js
-
-      - name: List generated files
-        if: always()
-        run: |
-          echo "Listing contents of reports directory:"
-          ls -la reports/ || echo "reports directory not found"
-          echo "Listing contents of current directory:"
-          ls -la
-
-      - name: Upload screenshots as artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: screenshots
-          path: reports/
-          if-no-files-found: warn
-          retention-days: 7
+        run: npm test

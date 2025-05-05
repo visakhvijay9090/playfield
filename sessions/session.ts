@@ -16,13 +16,14 @@ export async function launchSession(
         // Set viewport for consistent screenshots
         await page.setViewportSize({ width: 1280, height: 800 });
 
-        log(`Navigating to https://www.latestdeals.co.uk...`, sessionId);
+        const websiteUrl = process.env.NODEWEB;
+        log(`Navigating to ${websiteUrl}...`, sessionId);
         await retryAction(async () => {
-            await page.goto('https://www.latestdeals.co.uk', { timeout: 30000 });
+            await page.goto(websiteUrl!, { timeout: 30000 });
         });
 
         // Take screenshot after navigation
-        await takeScreenshot(page, sessionId, 'homepage');
+        //await takeScreenshot(page, sessionId, 'homepage');
 
         log(`Session launched successfully for ${username}`, sessionId, colors.green);
 
@@ -30,42 +31,42 @@ export async function launchSession(
         await retryAction(async () => {
             await page.click('text="AGREE"');
         });
-        await takeScreenshot(page, sessionId, 'after_agree');
+        //await takeScreenshot(page, sessionId, 'after_agree');
 
         log(`Clicking "Join"...`, sessionId);
         await retryAction(async () => {
             await page.click('text="Join"');
         });
-        await takeScreenshot(page, sessionId, 'join_page');
+        //await takeScreenshot(page, sessionId, 'join_page');
 
         log(`Clicking "Already a member? Login"...`, sessionId);
         await retryAction(async () => {
             await page.click('text="Already a member? Login"');
         });
-        await takeScreenshot(page, sessionId, 'login_form');
+        //await takeScreenshot(page, sessionId, 'login_form');
 
         log(`Filling login form for ${username}...`, sessionId);
         await retryAction(async () => {
             await page.fill('input[autocomplete="username"]', username);
             await page.fill('input[autocomplete="current-password"]', password);
         });
-        await takeScreenshot(page, sessionId, 'filled_form');
+        //await takeScreenshot(page, sessionId, 'filled_form');
 
         log(`Clicking "Continue"...`, sessionId);
         await retryAction(async () => {
             await page.click('text="Continue"');
         });
-        await takeScreenshot(page, sessionId, 'after_login');
+        //await takeScreenshot(page, sessionId, 'after_login');
 
         let randomWaitTime = Math.floor(Math.random() * (10 - 1 + 1)) + 1;
         log(`Waiting for ${randomWaitTime} seconds after login...`, sessionId, colors.yellow);
         await page.waitForTimeout(randomWaitTime * 1000);
 
-        log(`Navigating to https://www.latestdeals.co.uk/rate...`, sessionId);
+        log(`Navigating to ${websiteUrl}/rate...`, sessionId);
         await retryAction(async () => {
-            await page.goto('https://www.latestdeals.co.uk/rate', { timeout: 30000 });
+            await page.goto(`${websiteUrl}/rate`, { timeout: 30000 });
         });
-        await takeScreenshot(page, sessionId, 'rate_page');
+        //await takeScreenshot(page, sessionId, 'rate_page');
 
         randomWaitTime = Math.floor(Math.random() * (5 - 1 + 1)) + 1;
         log(`Waiting for ${randomWaitTime} seconds...`, sessionId, colors.yellow);
@@ -76,7 +77,7 @@ export async function launchSession(
         await limitedRepeatClicking(page, randomTimes, sessionId);
 
         log(`Session completed for ${username}`, sessionId, colors.green);
-        await takeScreenshot(page, sessionId, 'session_completed');
+        //await takeScreenshot(page, sessionId, 'session_completed');
 
         // Close the page here after all screenshots are taken
         await page.close();
@@ -93,7 +94,7 @@ async function limitedRepeatClicking(page: any, times: number, sessionId: number
 
         // Take screenshot every 5 iterations to avoid too many screenshots
         if (i % 5 === 0) {
-            await takeScreenshot(page, sessionId, `click_iteration_${i + 1}`);
+            //await takeScreenshot(page, sessionId, `click_iteration_${i + 1}`);
         }
 
         const shouldExit = await repeatClicking(page, sessionId);
@@ -107,7 +108,7 @@ async function repeatClicking(page: any, sessionId: number, maxIterations: numbe
     const shouldExit = await randomlyClickButton(page, sessionId);
     if (shouldExit) {
         log(`Exiting session ${sessionId}...`, sessionId, colors.green);
-        await takeScreenshot(page, sessionId, 'exit_condition_met');
+        //await takeScreenshot(page, sessionId, 'exit_condition_met');
         // Don't close the page here, let the parent function handle it
         return true; // Exit the session
     }
@@ -117,7 +118,7 @@ async function repeatClicking(page: any, sessionId: number, maxIterations: numbe
     await page.waitForTimeout(randomDelay);
 
     if (iteration === maxIterations - 1) {
-        await takeScreenshot(page, sessionId, 'final_iteration');
+        //await takeScreenshot(page, sessionId, 'final_iteration');
     }
 
     return await repeatClicking(page, sessionId, maxIterations, iteration + 1);
@@ -136,7 +137,7 @@ async function randomlyClickButton(page: any, sessionId: number): Promise<boolea
         if (button) {
             await button.click();
             log(`Clicked button: ${targetSelector}`, sessionId, colors.green);
-            await takeScreenshot(page, sessionId, `button_click_${randomIndex + 1}`);
+            //await takeScreenshot(page, sessionId, `button_click_${randomIndex + 1}`);
 
             // Check for the dynamic text "Earn more points in X hours/minutes/seconds" after clicking
             const dynamicTextRegex = /Earn more points in \d+ (hour?s?|minute?s?|second?s?)/;
@@ -148,7 +149,7 @@ async function randomlyClickButton(page: any, sessionId: number): Promise<boolea
                     const textContent = await element.textContent();
                     if (textContent && dynamicTextRegex.test(textContent)) {
                         log(`Dynamic text found: "${textContent}". Exiting session ${sessionId}...`, sessionId, colors.green);
-                        await takeScreenshot(page, sessionId, 'earn_more_points_found');
+                        //await takeScreenshot(page, sessionId, 'earn_more_points_found');
                         return true; // Indicate that the session should exit
                     }
                 }
@@ -157,7 +158,7 @@ async function randomlyClickButton(page: any, sessionId: number): Promise<boolea
             }
         } else {
             log(`Button not found: ${targetSelector}`, sessionId, colors.yellow);
-            await takeScreenshot(page, sessionId, 'button_not_found');
+            //await takeScreenshot(page, sessionId, 'button_not_found');
         }
     } catch (error) {
         log(`Error clicking button: ${error}`, sessionId, colors.red);
@@ -168,9 +169,10 @@ async function randomlyClickButton(page: any, sessionId: number): Promise<boolea
 
 async function takeScreenshot(page: Page, sessionId: number, actionName: string): Promise<void> {
     try {
-        const screenshotPath = getScreenshotPath(sessionId, actionName);
-        const buffer = await page.screenshot();
-        saveScreenshot(buffer, screenshotPath);
+        console.log("skipping screenshot")
+        // const screenshotPath = getScreenshotPath(sessionId, actionName);
+        // const buffer = await page.screenshot();
+        // saveScreenshot(buffer, screenshotPath);
     } catch (error) {
         log(`Failed to take screenshot: ${error}`, sessionId, colors.red);
     }
