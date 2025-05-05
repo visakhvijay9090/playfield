@@ -31,5 +31,5 @@ export function getCredentials() {
 
 // Get website URL from environment variable or use default
 export function getWebsiteUrl() {
-  return process.env.NODEWEBSITE || "https://www.eggg.co.uk";
+  return process.env.NODEWEBSITESITE || "https://www.eggg.co.uk";
 }

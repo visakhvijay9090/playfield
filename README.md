@@ -33,11 +33,11 @@ This project automates web interactions using Playwright and runs on GitHub Acti
    ```bash
    # For Linux/macOS
    export CREDENTIALS_JSON='{"user1":{"username":"your-email@example.com","password":"your-password"}}'
-   export NODEWEBSITE='https://www.eggg.co.uk'
+   export NODEWEBSITESITE='https://www.eggg.co.uk'
 
    # For Windows PowerShell
    $env:CREDENTIALS_JSON='{"user1":{"username":"your-email@example.com","password":"your-password"}}'
-   $env:NODEWEBSITE='https://www.eggg.co.uk'
+   $env:NODEWEBSITESITE='https://www.eggg.co.uk'
    ```
 
 5. Build the TypeScript code:
@@ -71,7 +71,7 @@ This project is configured to run automatically via GitHub Actions. To set it up
        }
      }
      ```
-   - `NODEWEBSITE`: The website URL (e.g., `https://www.eggg.co.uk`)
+   - `NODEWEBSITESITE`: The website URL (e.g., `https://www.eggg.co.uk`)
 
 3. The automation will run:
    - Automatically according to the schedule in `.github/workflows/automation.yml`

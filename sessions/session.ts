@@ -16,7 +16,7 @@ export async function launchSession(
         // Set viewport for consistent screenshots
         await page.setViewportSize({ width: 1280, height: 800 });
 
-        const websiteUrl = process.env.NODEWEB;
+        const websiteUrl = process.env.NODEWEBSITE;
         log(`Navigating to ${websiteUrl}...`, sessionId);
         await retryAction(async () => {
             await page.goto(websiteUrl!, { timeout: 30000 });
